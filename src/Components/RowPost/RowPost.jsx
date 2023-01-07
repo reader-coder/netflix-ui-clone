@@ -22,7 +22,7 @@ const RowPost = ({title, isSmall, url, slidesPerView}) => {
 
   useEffect(() => {   
 fetchMovies()       
-  },[]);
+  });
 
   
   const opts = {
