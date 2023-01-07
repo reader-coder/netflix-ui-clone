@@ -15,10 +15,13 @@ const RowPost = ({title, isSmall, url, slidesPerView}) => {
   const [movies, setMovies] = useState([]);
   const [urlId, setUrlId]= useState('');
 
-  useEffect(() => {
-    
-  axios.get(url).then(res=>setMovies(res.data.results)).catch(error=>error.status)
-        
+  const fetchMovies = ()=>{
+    axios.get(url).then(res=>setMovies(res.data.results)).catch(error=>error.status)
+  }
+
+
+  useEffect(() => {   
+fetchMovies()       
   },[]);
 
   
@@ -26,18 +29,16 @@ const RowPost = ({title, isSmall, url, slidesPerView}) => {
     height: '390',
     width: '100%',
     playerVars: {
-      // https://developers.google.com/youtube/player_parameters
       autoplay: 1,
     }
   }
 
   const handleMovieTrailer = (id)=>{
-    console.log(id);
     axios.get(`/movie/${id}/videos?api_key=${API_KEY}&language=en-US`).then(res=>{
       if(res.data.results!==0){
         setUrlId(res.data.results[0])
       }else{
-        console.log('Trailed Not Found')
+        console.log('Trailer Not Found')
       }
       })}
 
@@ -55,7 +56,7 @@ const RowPost = ({title, isSmall, url, slidesPerView}) => {
 
             {movies.map(movie=>(
 
-<SwiperSlide><img key={movie.id} className={isSmall?  'small__poster' :'poster'} src={`${IMAGE_URL+movie.backdrop_path}`} alt="poster" onClick={()=>handleMovieTrailer(movie.id)}/></SwiperSlide>
+<SwiperSlide key={movie.id}><img key={movie.id} className={isSmall?  'small__poster' :'poster'} src={`${IMAGE_URL+movie.backdrop_path}`} alt="poster" onClick={()=>handleMovieTrailer(movie.id)}/></SwiperSlide>
 
             ))}
                </Swiper>
